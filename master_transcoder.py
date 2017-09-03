@@ -44,7 +44,7 @@ PHWRT_TRANSCODER_PATH= find_executable(PHWRT_TRANSCODER_NAME)
 # extract from dpkg and change path
 # change by reg exp for numbers
 # if NOCHECK don't check second parameters just copy is
-plexTranscoderChangeList = {
+"""plexTranscoderChangeList = {
         "-map_inlineass" : "0:3",
         "-codec:0" : "libx264",
         "-crf:0" : "16",
@@ -67,7 +67,12 @@ ffmpegTranscoderChangeList = [
 {"b:a":"256k"},
 {"":""},
 {"mpegts_copyts":"1"}
-]
+]"""
+
+paramsToDelete=["-map_inlineass","-filter_complex","-map","-loglevel_plex"]
+paramsToChange=["-progressurl","-codec:1","-codec:0","ac3","libx264","h264","-crf:0","-maxrate:0","-bufsize:0","-r:0","-preset:0","-x264opts:0","-force_key_frames:0","-metadata:s:1","aac","-ar:1","-channel_layout:1","-b:1","-segment_copyts","expr:gte(t0+n_forced*1)","ass"]
+newParams=["-progress","-codec:a","-codec:v","copy","cedrus264 -pix_fmt nv12","cedrus264 -pix_fmt nv12","-crf","-maxrate","-bufsize","-r","-preset","-x264opts","-force_key_frames","-metadata:s","copy","-ar","-channel_layout","-b:a","-mpegts_copyts","expr:gte(t,n_forced*1)","copy"]
+#TODO subtitle : -vf subtitles=sub.srt:force_style='FontName=DejaVu Serif,FontSize=24' or ass codec
 
 REMOTE_ARGS = (#"%(env)s;"
                "cd %(working_dir)s;"
@@ -193,40 +198,47 @@ def transcode():
     log.info("Transcode stopped on host '%s'" % hostname)
 
 def convertAndFixParameter(config, args):
-    # Check to see if we need to call a user-script to replace/modify the file path
-    print("Args before : "+args) 
-    
-    for i, v in enumerate(args):
-        if config.get("path_script", None):
-            if v == "-i":
-                # i+1 = real path /tmmtmtmtm/tltltl
-                # Found the requested video path
-                path = args[i+1]
-
-                try:
-                    proc = subprocess.Popen([config.get("path_script"), path], stdout=subprocess.PIPE)
-                    proc.wait()
-                    new_path = proc.stdout.readline().strip()
-                    if new_path:
-                        log.debug("Replacing path with: %s" % new_path)
-                        args[i+1] = new_path
-                except Exception, e:
-                    log.error("Error calling path_script: %s" % str(e))
-        
+    # Check to see if we need to call a user-script to replace/modify the file path*
+    if DEBUG:
+        print 'before [%s]' % ', '.join(map(str, args))
+    new_args=[]
+    m_index = 0
+    while m_index < len(args):
+        v=args[m_index]
         # Convert plextranscoder arguments to ffmpeg
-        for keyItemChange,valueItemToChange in plexTranscoderChangeList.iteritems():
-            if (v == keyItemChange and args[i+1]==valueItemToChange):
-                v=(ffmpegTranscoderChangeList[t])[0]
-                args[i+1] = (ffmpegTranscoderChangeList[t])[1]
-            elif (v == keyItemChange and args[i+1]=="NOCHECK"):
-                v=(ffmpegTranscoderChangeList[t])[0]
-
+        if (v in paramsToDelete):
+            m_index=m_index+2
+        if v == "-i" and config.get("path_script", None):
+            # i+1 = real path /tmmtmtmtm/tltltl
+            # Found the requested video path
+            path = args[m_index+1]
+            new_args.append(v)
+            try:
+                proc = subprocess.Popen([config.get("path_script"), path], stdout=subprocess.PIPE)
+                proc.wait()
+                new_path = proc.stdout.readline().strip()
+                if new_path:
+                    log.debug("Replacing path with: %s" % new_path)
+                    new_args.append(new_path)
+            except Exception, e:
+                log.error("Error calling path_script: %s" % str(e))
+            m_index=m_index+2
+        else:
+            change =False
+            for index, item in enumerate(paramsToChange):
+               if (v == item):
+                    new_args.append(newParams[index])
+                    change =True
+                    break
+            if not change:
+                new_args.append(v)
+            m_index=m_index+1
         #TODO add some specifique arguments
         #ffmpegAddArgs
-            
-    print("Args before : "+after)
+    if DEBUG:
+        print 'after [%s]' % ', '.join(map(str, new_args))
     
-    return args
+    return new_args
 
 def main():
     # Specific usage options

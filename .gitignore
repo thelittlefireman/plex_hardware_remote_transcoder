@@ -1,3 +1,4 @@
 build
 .eggs
 *.pyc
+phwrt.egg-info
