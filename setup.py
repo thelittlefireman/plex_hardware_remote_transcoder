@@ -11,7 +11,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 """py_modules=["master-transcoder.a","slave-transcoder"],"""
 setup(
-    name='prhwt',
+    name='phwrt',
     version='1.0',
     description='Plex Remote Hardware Transcoder',
     long_description=long_description,
@@ -19,6 +19,7 @@ setup(
     author='thomas goureau',
     author_email='thomas.goureau@github',
     license='',
+	test_suite = 'tests',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -30,10 +31,10 @@ setup(
 	py_modules=["master_transcoder","slave_transcoder"],
     entry_points={
         'console_scripts': [
-            'prhwt-m=master_transcoder:main',
-            'prhwt-m-tr=master_transcoder:transcode',
-            'prhwt-s-tr=slave_transcoder:transcode'
+            'phwrt-m=master_transcoder:main',
+            'phwrt-m-tr=master_transcoder:transcode',
+            'phwrt-s-tr=slave_transcoder:transcode'
         ],
     },
-    install_requires=['termcolor', 'psutil']
+    #install_requires=['termcolor', 'psutil']
 )
