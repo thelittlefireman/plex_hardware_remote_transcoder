@@ -18,7 +18,7 @@ if sys.platform == "darwin":
 elif sys.platform.find('synology') != -1:
     # todo set by variable : volumeNum = raw_input("Volume Number: ")
     #synology
-    TRANSCODER_DIR = "/volume1/@appstore/Plex Media Server"
+    TRANSCODER_DIR = "/volume1/@appstore/Plex Media Server/"
     SETTINGS_PATH  = "/volume1/Plex/Library/Application Support/Plex Media Server/Preferences.xml"
 
 elif sys.platform.startswith('linux'):
@@ -26,17 +26,17 @@ elif sys.platform.startswith('linux'):
     TRANSCODER_DIR = "/usr/lib/plexmediaserver/"
     SETTINGS_PATH  = "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Preferences.xml"
 elif DEBUG:
-    TRANSCODER_DIR = "./testFolder"
+    TRANSCODER_DIR = "./testFolder/"
 else:
     raise NotImplementedError("This platform is not yet supported")
     
 # 
-ORIGINAL_TRANSCODER_NAME = TRANSCODER_DIR+"Plex Transcoder"
-NEW_TRANSCODER_NAME = TRANSCODER_DIR+"local_plex_transcoder"
+ORIGINAL_TRANSCODER_NAME = os.path.join(TRANSCODER_DIR,"Plex Transcoder")
+NEW_TRANSCODER_NAME = os.path.join(TRANSCODER_DIR,"local_plex_transcoder")
 PHWRT_TRANSCODER_NAME = "phwrt-m-tr"
 
-ORIGINAL_TRANSCODER_PATH = TRANSCODER_DIR+ORIGINAL_TRANSCODER_NAME
-NEW_TRANSCODER_PATH = TRANSCODER_DIR+NEW_TRANSCODER_NAME
+ORIGINAL_TRANSCODER_PATH = os.path.join(TRANSCODER_DIR,ORIGINAL_TRANSCODER_NAME)
+NEW_TRANSCODER_PATH = os.path.join(TRANSCODER_DIR,NEW_TRANSCODER_NAME)
 PHWRT_TRANSCODER_PATH= find_executable(PHWRT_TRANSCODER_NAME)
 
 # TODO change to be configurable by a file
@@ -208,7 +208,7 @@ def convertAndFixParameter(config, args):
         # Convert plextranscoder arguments to ffmpeg
         if (v in paramsToDelete):
             m_index=m_index+2
-        if v == "-i" and config.get("path_script", None):
+        elif v == "-i" and config.get("path_script", None):
             # i+1 = real path /tmmtmtmtm/tltltl
             # Found the requested video path
             path = args[m_index+1]
