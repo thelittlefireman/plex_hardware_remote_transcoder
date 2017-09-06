@@ -2,6 +2,7 @@
 import os
 import unittest
 from unittest import TestCase
+from utilsphwrt import *
 
 import master_transcoder
 
@@ -11,8 +12,8 @@ CORRECT_PARAMS1=['-codec:v' ,'cedrus264 -pix_fmt nv12','-codec:a' ,'copy' , '-co
 class TestConvertParams(TestCase):
     """Unit test class to test other methods in the app."""
     def test_convert_params_base(self):
-        config = master_transcoder.get_config()
-        new_args = master_transcoder.convertAndFixParameter(config,PARAMS1)
+        config = get_config()
+        new_args = convertAndFixParameter(config,PARAMS1)
         self.assertEqual(CORRECT_PARAMS1,new_args)
     def test_correct_nb_params(self):
-        self.assertEqual(len(master_transcoder.newParams),len(master_transcoder.paramsToChange))
+        self.assertEqual(len(newParams),len(paramsToChange))
