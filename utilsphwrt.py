@@ -193,6 +193,6 @@ def getNewTranscoderPath():
 
 def getPHWRTTranscoderPath():
     if DEBUG:
-        return "./phwrt_debug"
+        return "./tests/phwrt_debug"
     else:
         return find_executable(PHWRT_TRANSCODER_NAME)
