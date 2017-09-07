@@ -9,7 +9,7 @@ TEST_FOLDER="./test folder/"
 TEST_PATH=os.path.join(TEST_FOLDER,"Plex Transcoder")
 
 def beforeTest():
-    DEBUG=True
+    utilsphwrt.DEBUG=True
     if not os.path.exists(TEST_FOLDER):
         os.makedirs(TEST_FOLDER)
     #create fake origin transcoder
