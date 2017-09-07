@@ -2,7 +2,7 @@
 import os,io
 import unittest
 from unittest import TestCase
-from utilsphwrt import *
+import utilsphwrt
 import master_transcoder
 
 TEST_FOLDER="./test folder/"
@@ -17,25 +17,25 @@ def beforeTest():
         file.write("Hello!")
         file.close()
     #remove new transcode
-    if os.path.exists(getNewTranscoderPath()):
-        os.remove(getNewTranscoderPath())
+    if os.path.exists(utilsphwrt.getNewTranscoderPath()):
+        os.remove(utilsphwrt.getNewTranscoderPath())
 
 class TestInstall(TestCase):
     """Unit test class to test other methods in the app."""
     def test_valid_install(self):
         beforeTest()
         self.assertTrue(master_transcoder.install_phwrt())
-        self.assertTrue(os.path.exists(getNewTranscoderPath()))
-        self.assertTrue(os.path.exists(getOriginalTranscoderPath()))
-        self.assertTrue(os.path.exists(getPHWRTTranscoderPath()))
+        self.assertTrue(os.path.exists(utilsphwrt.getNewTranscoderPath()))
+        self.assertTrue(os.path.exists(utilsphwrt.getOriginalTranscoderPath()))
+        self.assertTrue(os.path.exists(utilsphwrt.getPHWRTTranscoderPath()))
 
     def test_valid_uninstall(self):
         beforeTest()
         master_transcoder.install_phwrt()
         self.assertTrue(master_transcoder.uninstall_phwrt())
-        self.assertFalse(os.path.exists(getNewTranscoderPath()))
-        self.assertTrue(os.path.exists(getOriginalTranscoderPath()))
-        self.assertTrue(os.path.exists(getPHWRTTranscoderPath()))
+        self.assertFalse(os.path.exists(utilsphwrt.getNewTranscoderPath()))
+        self.assertTrue(os.path.exists(utilsphwrt.getOriginalTranscoderPath()))
+        self.assertTrue(os.path.exists(utilsphwrt.getPHWRTTranscoderPath()))
 
 
     def test_install_on_install(self):
