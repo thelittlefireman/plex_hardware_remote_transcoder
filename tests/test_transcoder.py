@@ -1,6 +1,5 @@
-from unittest import TestCase
 import os
-import self as self
+import unittest
 
 import master_transcoder
 
