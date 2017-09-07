@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import json
 import os
 import subprocess
 import logging.config
@@ -70,7 +71,7 @@ DEFAULT_CONFIG = {
                 "maxBytes": 10485760,
                 "backupCount": 20,
                 "encoding": "utf8"
-            },
+            }
         },
         "loggers": {
             "prt": {
@@ -88,11 +89,19 @@ ORIGINAL_TRANSCODER_NAME = "Plex Transcoder"
 NEW_TRANSCODER_NAME = "local_plex_transcoder"
 PHWRT_TRANSCODER_NAME = "phwrt-m-tr"
 
-def get_config():
-    path = os.path.expanduser("~/.prt.conf")
+def get_config(path=None):
+    if path == None:
+        file_path =os.path.expanduser("~/.prt.conf")
+    else:
+        script_dir = os.path.dirname(__file__)
+        file_path = os.path.join(script_dir, path)
     try:
-        return json.load(open(path))
+        return json.load(open(file_path))
     except Exception, e:
+        if DEBUG :
+            print ("Error load config: %s %s" % (str(e),str(path)))
+        else:
+            log.error("Error load config: %s %s" % (str(e),str(path)))
         return DEFAULT_CONFIG.copy()
 
 def convertAndFixParameter(config, args):

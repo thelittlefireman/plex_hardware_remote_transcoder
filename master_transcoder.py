@@ -66,8 +66,11 @@ def uninstall_phwrt():
     return True
     #raise NotImplementedError("Not yet done please be patient ;)")
 
-def transcode():
-    config = get_config()
+def transcode(configPath=None):
+    if configPath == None:
+        config = get_config()
+    else:
+        config = get_config(configPath)
     # Set up the arguments
     args = [getNewTranscoderPath()] + sys.argv[1:]
     
@@ -79,7 +82,10 @@ def transcode():
     for hostname, host in servers.items():
         selected_hostname= hostname
         selected_host=host
-    
+
+    if selected_host == None or selected_host == None:
+        print "can't select server"
+        return False
     args = convertAndFixParameter(config, args)
             
     command = REMOTE_ARGS % {
@@ -89,15 +95,32 @@ def transcode():
         "args":         ' '.join([pipes.quote(a) for a in args])
     }
     log.info("Launching transcode_remote with command %s\n" % command)
-    
-    args = ["ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (host["user"], hostname), "-p", host["port"]] + [command]
 
+    if selected_host["password"] != None:
+        if not find_executable("sshpass"):
+            print "To use ssh with password auth you should install sshpass first"
+            return False
+        args = ["sshpass", "-p", "%s" % selected_host["password"],"ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
+    else:
+        if not find_executable("ssh"):
+            print "To use ssh you should install ssh first"
+            return False
+        args = ["ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
 
-    log.info("Launching transcode_remote with args %s\n" % args)
+    args = args + [command]
+
+    if DEBUG:
+        print ("Launching transcode_remote with args %s\n" % args)
+    else:
+        log.info("Launching transcode_remote with args %s\n" % args)
 
     # Spawn the process
-    proc = subprocess.Popen(args)
-    proc.wait()
+    try:
+        proc = subprocess.Popen("exec " + args)
+        proc.wait()
+    except ValueError, e:
+        print e.output
+        proc.kill()
 
     log.info("Transcode stopped on host '%s'" % hostname)
 

@@ -43,3 +43,4 @@ class TestInstall(TestCase):
     def test_uninstall_before_install(self):
         beforeTest()
         self.assertFalse(master_transcoder.uninstall_phwrt())
+
