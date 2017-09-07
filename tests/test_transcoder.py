@@ -1,6 +1,6 @@
 import os
-import unittest
-
+from unittest import TestCase
+from utilsphwrt import *
 import master_transcoder
 
 class TestInstall(TestCase):
