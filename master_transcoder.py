@@ -116,7 +116,7 @@ def transcode(configPath=None):
 
     # Spawn the process
     try:
-        proc = subprocess.Popen("exec " + args)
+        proc = subprocess.Popen([exec] + args)
         proc.wait()
     except ValueError, e:
         print e.output
