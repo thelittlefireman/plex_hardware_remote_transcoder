@@ -7,7 +7,7 @@ from distutils.spawn import find_executable
 
 import sys
 
-DEBUG=True
+DEBUG=None
 
 # TODO change to be configurable by a file
 # todo fix font parameters : /usr/lib/plexmediaserver/Resources/Fonts/
@@ -148,7 +148,9 @@ def convertAndFixParameter(config, args):
     return new_args
 
 def getTranscoderPath():
-    if sys.platform == "darwin":
+    if  DEBUG:
+        TRANSCODER_PATH = "./test folder/"
+    elif sys.platform == "darwin":
         # OS X
         TRANSCODER_PATH = "/Applications/Plex Media Server.app/Contents/"
 
@@ -160,14 +162,14 @@ def getTranscoderPath():
     elif sys.platform.startswith('linux'):
         # Linux
         TRANSCODER_PATH = "/usr/lib/plexmediaserver/"
-    elif DEBUG:
-        TRANSCODER_PATH = "./test folder/"
     else:
         raise NotImplementedError("This platform is not yet supported")
     return TRANSCODER_PATH
 
 def getSettingsPath():
-    if sys.platform == "darwin":
+    if DEBUG:
+        SETTINGS_PATH = "./test folder/"
+    elif sys.platform == "darwin":
         # OS X
         SETTINGS_PATH  = "~/Library/Preferences/com.plexapp.plexmediaserver"
 
@@ -179,8 +181,6 @@ def getSettingsPath():
     elif sys.platform.startswith('linux'):
         # Linux
         SETTINGS_PATH  = "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Preferences.xml"
-    elif DEBUG:
-        SETTINGS_PATH = "./test folder/"
     else:
         raise NotImplementedError("This platform is not yet supported")
     return SETTINGS_PATH
