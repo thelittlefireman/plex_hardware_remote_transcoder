@@ -100,12 +100,12 @@ def transcode(configPath=None):
         if not find_executable("sshpass"):
             print "To use ssh with password auth you should install sshpass first"
             return False
-        args = ["sshpass", "-p", "%s" % selected_host["password"],"ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
+        args = ["exec","sshpass", "-p", "%s" % selected_host["password"],"ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
     else:
         if not find_executable("ssh"):
             print "To use ssh you should install ssh first"
             return False
-        args = ["ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
+        args = ["exec","ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
 
     args = args + [command]
 
@@ -116,7 +116,7 @@ def transcode(configPath=None):
 
     # Spawn the process
     try:
-        proc = subprocess.Popen(["exec"] + args)
+        proc = subprocess.Popen(args)
         proc.wait()
     except ValueError, e:
         print e.output
