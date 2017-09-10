@@ -48,6 +48,48 @@ def install_phwrt():
         return False
     return True
 
+def prepare_nfs(configPath=None):
+    if configPath == None:
+        config = get_config()
+    else:
+        config = get_config(configPath)
+
+    servers = config["servers"]
+    selected_hostname, selected_host = None, None
+    # TODO add loadBalancing # host["port"], host["user"]
+    for hostname, host in servers.items():
+        selected_hostname= hostname
+        selected_host=host
+
+    if config["transcode_path"] != None:
+        #edit /etc/exports /home/user2 192.168.0.11(rw,sync)
+        transcode_mount_path = config["transcode_path"]+" "+selected_host+"(rw,sync)"
+        if not transcode_mount_path in open('/etc/exports').read():
+            with open("/etc/exports", "a") as f:
+                f.write(transcode_mount_path)
+                f.close
+
+    if config["media_path"] != None:
+        media_mount_path = config["media_path"]+" "+selected_host+"(rw,sync)"
+        if not media_mount_path in open('/etc/exports').read():
+            with open("/etc/exports", "a") as f:
+                f.write(media_mount_path)
+                f.close
+
+    allow_server = "ALL:"+selected_host
+    if not allow_server in open('/etc/hosts.allow').read():
+        with open("/etc/hosts.allow", "a") as f:
+            f.write(allow_server)
+            f.close
+
+    deny_server = "ALL:PARANOID"
+    if not deny_server in open('/etc/hosts.deny').read():
+        with open("/etc/hosts.deny", "a") as f:
+            f.write(deny_server)
+            f.close
+
+
+
 def uninstall_phwrt():
     print "Rename new transcoder by old transcoder"
     
@@ -142,3 +184,10 @@ def main():
     if sys.argv[1] == "uninstall":
         print "Uninstalling Plex hardware remote Transcoder"
         uninstall_phwrt()
+
+    if sys.argv[1] == "prepare_nfs":
+        print "prepare server for nfs mount"
+        prepare_nfs()
+
+def usage():
+    return ""

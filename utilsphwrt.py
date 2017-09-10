@@ -52,6 +52,8 @@ DEFAULT_CONFIG = {
     "ipaddress": "",
     "path_script":    None,
     "servers_script": None,
+    "transcode_path":None,
+    "media_path":None,
     "servers":   {},
     "auth_token": None,
     "logging":   {

@@ -31,9 +31,9 @@ setup(
 	py_modules=["master_transcoder","slave_transcoder"],
     entry_points={
         'console_scripts': [
-            'phwrt-m=master_transcoder:main',
+            'phwrt-master=master_transcoder:main',
             'phwrt-m-tr=master_transcoder:transcode',
-            'phwrt-s-tr=slave_transcoder:transcode'
+            'phwrt-slave=slave_transcoder:main'
         ],
     },
     #install_requires=['termcolor', 'psutil']
