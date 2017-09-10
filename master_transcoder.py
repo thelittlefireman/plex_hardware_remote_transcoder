@@ -72,8 +72,8 @@ def transcode(configPath=None):
     else:
         config = get_config(configPath)
     # Set up the arguments
-    args = [getNewTranscoderPath()] + sys.argv[1:]
-    
+    #original transcode path args = [getNewTranscoderPath()] + sys.argv[1:]
+    #args = ['ffmpeg'] + sys.argv[1:]
     # get serveurs list
     servers = config["servers"]
 
