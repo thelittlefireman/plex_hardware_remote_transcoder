@@ -91,7 +91,7 @@ def transcode(configPath=None):
     command = REMOTE_ARGS % {
         #"env":          build_env(),
         "working_dir":  pipes.quote(os.getcwd()),
-        "command":      PHWRT_TRANSCODER_NAME,
+        "command":      "ffmpeg",
         "args":         ' '.join([pipes.quote(a) for a in args])
     }
     log.info("Launching transcode_remote with command %s\n" % command)
