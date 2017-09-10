@@ -96,7 +96,7 @@ def transcode(configPath=None):
     }
     log.info("Launching transcode_remote with command %s\n" % command)
 
-    if selected_host["password"] != None:
+    if "password" in selected_host and (selected_host["password"]!="" or selected_host["password"]!= None):
         if not find_executable("sshpass"):
             print "To use ssh with password auth you should install sshpass first"
             return False
