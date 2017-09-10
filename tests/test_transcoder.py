@@ -1,4 +1,4 @@
-import os
+import os, sys
 from unittest import TestCase
 import utilsphwrt
 import master_transcoder
