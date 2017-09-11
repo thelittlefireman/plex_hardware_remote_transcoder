@@ -198,3 +198,8 @@ def getPHWRTTranscoderPath():
         return "./tests/phwrt_debug"
     else:
         return find_executable(PHWRT_TRANSCODER_NAME)
+
+def setup_logging():
+    config = get_config()
+    logging.config.dictConfig(config["logging"])
+

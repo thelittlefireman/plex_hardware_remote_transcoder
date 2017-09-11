@@ -116,6 +116,8 @@ def uninstall_phwrt():
     #raise NotImplementedError("Not yet done please be patient ;)")
 
 def transcode(configPath=None):
+    utilsphwrt.setup_logging()
+
     if configPath == None:
         config = utilsphwrt.get_config()
     else:
