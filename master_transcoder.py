@@ -19,6 +19,9 @@ REMOTE_ARGS = (#"%(env)s;"
 def install_phwrt():
     # get path of remote transcode
 
+    #generate config
+    get_config()
+
     if not getPHWRTTranscoderPath():
         print "Couldn't find `phwrt-m-tr` executable"
         return False
