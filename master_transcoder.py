@@ -70,13 +70,13 @@ def prepare_nfs(configPath=None):
                 f.close
 
     if config["media_path"] != None:
-        media_mount_path = config["media_path"]+" "+selected_host+"(rw,sync)"
+        media_mount_path = config["media_path"]+" "+selected_hostname+"(rw,sync)"
         if not media_mount_path in open('/etc/exports').read():
             with open("/etc/exports", "a") as f:
                 f.write(media_mount_path)
                 f.close
 
-    allow_server = "ALL:"+selected_host
+    allow_server = "ALL:"+selected_hostname
     if not allow_server in open('/etc/hosts.allow').read():
         with open("/etc/hosts.allow", "a") as f:
             f.write(allow_server)
@@ -87,6 +87,10 @@ def prepare_nfs(configPath=None):
         with open("/etc/hosts.deny", "a") as f:
             f.write(deny_server)
             f.close
+
+    nfs = subprocess.Popen("systemctl restart nfs-kernel-server")
+    nfs.wait()
+
 
 
 
@@ -127,6 +131,7 @@ def transcode(configPath=None):
 
     if selected_host == None or selected_host == None:
         print "can't select server"
+        log.error("can't select server")
         return False
     args = convertAndFixParameter(config, args)
             
@@ -162,6 +167,7 @@ def transcode(configPath=None):
         proc.wait()
     except ValueError, e:
         print e.output
+        log.error(e.output)
         proc.kill()
 
     log.info("Transcode stopped on host '%s'" % hostname)
