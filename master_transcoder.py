@@ -172,7 +172,7 @@ def transcode(configPath=None):
         proc.wait()
     except ValueError, e:
         print e.output
-        utilsphwrt.log.error(e.output)
+        utilsphwrt.log.info(e.output)
         proc.kill()
 
     utilsphwrt.log.info("Transcode stopped on host '%s'" % hostname)
