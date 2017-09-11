@@ -182,7 +182,7 @@ def main():
         usage()
         sys.exit(-1)
     
-    if sys.argv[len(sys.argv)] == "-d" or sys.argv[len(sys.argv)] == "debug":
+    if sys.argv[len(sys.argv)-1] == "-d" or sys.argv[len(sys.argv)-1] == "debug":
         DEBUG=True
         TRANSCODER_DIR = "./testFolder"
     
