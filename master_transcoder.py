@@ -95,8 +95,6 @@ def prepare_nfs(configPath=None):
     nfs.wait()
 
 
-
-
 def uninstall_phwrt():
     print "Rename new transcoder by old transcoder"
     
@@ -114,6 +112,14 @@ def uninstall_phwrt():
         os.remove(utilsphwrt.getNewTranscoderPath())
     return True
     #raise NotImplementedError("Not yet done please be patient ;)")
+
+def override():
+    if os.path.exists(utilsphwrt.getNewTranscoderPath()):
+        shutil.copy(utilsphwrt.getNewTranscoderPath(),utilsphwrt.getOriginalTranscoderPath())
+        os.chmod(utilsphwrt.getOriginalTranscoderPath(), 0755)
+    os.remove(utilsphwrt.getPHWRTTranscoderPath())
+
+    install_phwrt()
 
 def transcode(configPath=None):
     utilsphwrt.setup_logging()
@@ -201,6 +207,10 @@ def main():
     if sys.argv[1] == "prepare_nfs":
         print "prepare server for nfs mount"
         prepare_nfs()
+
+    if sys.argv[1] == "override":
+        print "override"
+        override()
 
 def usage():
     return ""
