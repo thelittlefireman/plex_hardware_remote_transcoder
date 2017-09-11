@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 import pipes
 import subprocess
-
+from distutils.spawn import find_executable
 __author__  = "Thomas Goureau"
 __version__ = "0.0.1"
 
-import sys
+import sys,os
 
 import shutil
-from utilsphwrt import *
+import utilsphwrt
 
 """ Global Variable installation """
 REMOTE_ARGS = (#"%(env)s;"
@@ -20,32 +20,32 @@ def install_phwrt():
     # get path of remote transcode
 
     #generate config
-    get_config()
+    utilsphwrt.get_config()
 
-    if not getPHWRTTranscoderPath():
+    if not utilsphwrt.getPHWRTTranscoderPath():
         print "Couldn't find `phwrt-m-tr` executable"
         return False
     
     print "Rename old transcoder"
     # if already exist don't override
-    if os.path.exists(getNewTranscoderPath()):
+    if os.path.exists(utilsphwrt.getNewTranscoderPath()):
         print "Already Install, if is not working try override ?"
         return False
 
     # TODO if not found ==> already install
     
     try:
-        os.rename(getOriginalTranscoderPath(), getNewTranscoderPath())
+        os.rename(utilsphwrt.getOriginalTranscoderPath(), utilsphwrt.getNewTranscoderPath())
     except Exception, e:
         print "Error renaming original transcoder: %s" % str(e)
-        print "path:" +getOriginalTranscoderPath()
+        print "path:" +utilsphwrt.getOriginalTranscoderPath()
         return False
     
     print "Replace by new transcoder"
     
     try:
-        shutil.copyfile(getPHWRTTranscoderPath(), getOriginalTranscoderPath())
-        os.chmod(getOriginalTranscoderPath(), 0755)
+        shutil.copyfile(utilsphwrt.getPHWRTTranscoderPath(), utilsphwrt.getOriginalTranscoderPath())
+        os.chmod(utilsphwrt.getOriginalTranscoderPath(), 0755)
     except Exception,e:
         print "Error on installation: %s" % str(e)
         return False
@@ -53,9 +53,9 @@ def install_phwrt():
 
 def prepare_nfs(configPath=None):
     if configPath == None:
-        config = get_config()
+        config = utilsphwrt.get_config()
     else:
-        config = get_config(configPath)
+        config = utilsphwrt.get_config(configPath)
 
     servers = config["servers"]
     selected_hostname, selected_host = None, None
@@ -100,29 +100,29 @@ def prepare_nfs(configPath=None):
 def uninstall_phwrt():
     print "Rename new transcoder by old transcoder"
     
-    if not os.path.exists(getNewTranscoderPath()):
+    if not os.path.exists(utilsphwrt.getNewTranscoderPath()):
         print "Couldn't find `local_plex_transcoder`, is phwrt installed ?"
         return False
 
     try:
-        shutil.copyfile(getNewTranscoderPath(), getOriginalTranscoderPath())
-        os.chmod(getOriginalTranscoderPath(), 0755)
+        shutil.copyfile(utilsphwrt.getNewTranscoderPath(), utilsphwrt.getOriginalTranscoderPath())
+        os.chmod(utilsphwrt.getOriginalTranscoderPath(), 0755)
     except Exception, e:
         print "Error on uninstall transcoder: %s" % str(e)
         return False
-    if os.path.exists(getNewTranscoderPath()):
-        os.remove(getNewTranscoderPath())
+    if os.path.exists(utilsphwrt.getNewTranscoderPath()):
+        os.remove(utilsphwrt.getNewTranscoderPath())
     return True
     #raise NotImplementedError("Not yet done please be patient ;)")
 
 def transcode(configPath=None):
     if configPath == None:
-        config = get_config()
+        config = utilsphwrt.get_config()
     else:
-        config = get_config(configPath)
+        config = utilsphwrt.get_config(configPath)
     # Set up the arguments
     #original transcode path args = [getNewTranscoderPath()] + sys.argv[1:]
-    #args = ['ffmpeg'] + sys.argv[1:]
+    args = sys.argv[1:]
     # get serveurs list
     servers = config["servers"]
 
@@ -134,9 +134,9 @@ def transcode(configPath=None):
 
     if selected_host == None or selected_host == None:
         print "can't select server"
-        log.error("can't select server")
+        utilsphwrt.log.error("can't select server")
         return False
-    args = convertAndFixParameter(config, args)
+    args = utilsphwrt.convertAndFixParameter(config, args)
             
     command = REMOTE_ARGS % {
         #"env":          build_env(),
@@ -144,7 +144,7 @@ def transcode(configPath=None):
         "command":      "ffmpeg",
         "args":         ' '.join([pipes.quote(a) for a in args])
     }
-    log.info("Launching transcode_remote with command %s\n" % command)
+    utilsphwrt.log.info("Launching transcode_remote with command %s\n" % command)
 
     if "password" in selected_host and (selected_host["password"]!="" or selected_host["password"]!= None):
         if not find_executable("sshpass"):
@@ -159,10 +159,10 @@ def transcode(configPath=None):
 
     args = args + [command]
 
-    if DEBUG:
+    if utilsphwrt.DEBUG:
         print ("Launching transcode_remote with args %s\n" % args)
     else:
-        log.info("Launching transcode_remote with args %s\n" % args)
+        utilsphwrt.log.info("Launching transcode_remote with args %s\n" % args)
 
     # Spawn the process
     try:
@@ -170,10 +170,10 @@ def transcode(configPath=None):
         proc.wait()
     except ValueError, e:
         print e.output
-        log.error(e.output)
+        utilsphwrt.log.error(e.output)
         proc.kill()
 
-    log.info("Transcode stopped on host '%s'" % hostname)
+    utilsphwrt.log.info("Transcode stopped on host '%s'" % hostname)
 
 def main():
     # Specific usage options
