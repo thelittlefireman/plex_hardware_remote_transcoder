@@ -66,20 +66,20 @@ def prepare_nfs(configPath=None):
 
     if config["transcode_path"] != None:
         #edit /etc/exports /home/user2 192.168.0.11(rw,sync)
-        transcode_mount_path = config["transcode_path"]+" "+selected_host+"(rw,sync)"
+        transcode_mount_path = str(config["transcode_path"])+" "+str(selected_host)+"(rw,sync)"
         if not transcode_mount_path in open('/etc/exports').read():
             with open("/etc/exports", "a") as f:
                 f.write(transcode_mount_path)
                 f.close
 
     if config["media_path"] != None:
-        media_mount_path = config["media_path"]+" "+selected_hostname+"(rw,sync)"
+        media_mount_path = str(config["media_path"])+" "+str(selected_hostname)+"(rw,sync)"
         if not media_mount_path in open('/etc/exports').read():
             with open("/etc/exports", "a") as f:
                 f.write(media_mount_path)
                 f.close
 
-    allow_server = "ALL:"+selected_hostname
+    allow_server = "ALL:"+str(selected_hostname)
     if not allow_server in open('/etc/hosts.allow').read():
         with open("/etc/hosts.allow", "a") as f:
             f.write(allow_server)
