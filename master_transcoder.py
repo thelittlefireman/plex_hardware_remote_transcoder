@@ -168,7 +168,9 @@ def transcode(configPath=None):
 
     # Spawn the process
     try:
-        proc = subprocess.Popen(args)
+        proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
+        out = proc.stdout.read()
+        utilsphwrt.log.info(out.decode("utf-8"))
         proc.wait()
     except ValueError, e:
         print e.output
