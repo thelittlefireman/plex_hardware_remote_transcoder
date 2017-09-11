@@ -28,7 +28,7 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
     keywords='plex remote hw transcoding',
-	py_modules=["master_transcoder","slave_transcoder"],
+	py_modules=["master_transcoder","slave_transcoder","utilsphwrt"],
     entry_points={
         'console_scripts': [
             'phwrt-master=master_transcoder:main',
