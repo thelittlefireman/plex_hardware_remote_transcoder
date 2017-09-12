@@ -39,7 +39,7 @@ ffmpegTranscoderChangeList = [
 {"mpegts_copyts":"1"}
 ]"""
 
-paramsToDelete=["-map_inlineass","-filter_complex","-map","-loglevel_plex"]
+paramsToDelete=["-map_inlineass","-filter_complex","-map","-loglevel_plex","-fdash"]
 paramsToChange=["-progressurl","-codec:1","-codec:#0x02","-codec:0","-codec:#0x01","ac3","libx264","h264","-crf:0","-maxrate:0","-bufsize:0","-r:0","-preset:0","-x264opts:0","-force_key_frames:0","-metadata:s:1","-metadata:s:0","aac","-ar:1","-channel_layout:1","-b:1","-segment_copyts","expr:gte(t0+n_forced*1)","ass"]
 newParams=["-progress","-codec:a","-codec:a","-codec:v","-codec:v","copy","cedrus264 -pix_fmt nv12","cedrus264 -pix_fmt nv12","-crf","-maxrate","-bufsize","-r","-preset","-x264opts","-force_key_frames","-metadata:s:a","-metadata:s:v","copy","-ar","-channel_layout","-b:a","-mpegts_copyts","expr:gte(t,n_forced*1)","copy"]
 #TODO subtitle : -vf subtitles=sub.srt:force_style='FontName=DejaVu Serif,FontSize=24' or ass codec
