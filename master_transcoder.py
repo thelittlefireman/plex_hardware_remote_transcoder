@@ -120,6 +120,20 @@ def override():
     os.remove(utilsphwrt.getPHWRTTranscoderPath())
 
     install_phwrt()
+    
+def local_transcode():
+    args = [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
+     # Spawn the process
+    try:
+        proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
+        out = proc.stdout.read()
+        utilsphwrt.log.info(out.decode("utf-8"))
+        proc.wait()
+    except ValueError, e:
+        local_transcode()
+        print e.output
+        utilsphwrt.log.info(e.output)
+        proc.kill()
 
 def transcode(configPath=None):
     utilsphwrt.setup_logging()
@@ -143,6 +157,7 @@ def transcode(configPath=None):
     if selected_host == None or selected_host == None:
         print "can't select server"
         utilsphwrt.log.error("can't select server")
+        local_transcode()
         return False
     args = utilsphwrt.convertAndFixParameter(config, args)
             
@@ -157,11 +172,13 @@ def transcode(configPath=None):
     if "password" in selected_host and (selected_host["password"]!="" or selected_host["password"]!= None):
         if not find_executable("sshpass"):
             print "To use ssh with password auth you should install sshpass first"
+            local_transcode()
             return False
         args = ["sshpass", "-p", "%s" % selected_host["password"],"ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
     else:
         if not find_executable("ssh"):
             print "To use ssh you should install ssh first"
+            local_transcode()
             return False
         args = ["ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
 
@@ -179,6 +196,7 @@ def transcode(configPath=None):
         utilsphwrt.log.info(out.decode("utf-8"))
         proc.wait()
     except ValueError, e:
+        local_transcode()
         print e.output
         utilsphwrt.log.info(e.output)
         proc.kill()
