@@ -160,10 +160,15 @@ def transcode(configPath=None):
         local_transcode()
         return False
     args = utilsphwrt.convertAndFixParameter(config, args)
-            
+    
+    working_dir=""
+    if "transcode_path" in config and ( config["transcode_path"]!="" or config["transcode_path"]!=None ):
+        working_dir=config["transcode_path"]
+    else:
+        working_dir=os.getcwd()
     command = REMOTE_ARGS % {
         #"env":          build_env(),
-        "working_dir":  pipes.quote(os.getcwd()),
+        "working_dir":  pipes.quote(),
         "command":      "ffmpeg",
         "args":         ' '.join([pipes.quote(a) for a in args])
     }
