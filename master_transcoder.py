@@ -194,7 +194,10 @@ def transcode(configPath=None):
         proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
         out = proc.stdout.read()
         utilsphwrt.log.info(out.decode("utf-8"))
-        proc.wait()
+        returnCode = proc.wait()
+        if returnCode !=0:
+            utilsphwrt.log.info("return code !=0")
+            local_transcode()
     except ValueError, e:
         local_transcode()
         print e.output
