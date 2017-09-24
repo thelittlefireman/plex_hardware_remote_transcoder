@@ -98,12 +98,14 @@ def get_config(path=None):
         script_dir = os.path.dirname(__file__)
         file_path = os.path.join(script_dir, path)
     try:
+        log.info('Get config - '+file_path)
         return json.load(open(file_path))
     except Exception, e:
         if DEBUG:
             print ("Error load config: %s %s" % (str(e),str(path)))
         else:
             log.error("Error load config: %s %s" % (str(e),str(path)))
+        log.info('Get config - '+DEFAULT_CONFIG.copy())
         return DEFAULT_CONFIG.copy()
 
 def convertAndFixParameter(config, args):
