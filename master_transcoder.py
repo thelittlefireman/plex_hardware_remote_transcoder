@@ -125,11 +125,8 @@ def local_transcode():
      # Spawn the process
     try:
         proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
-        out = proc.stdout.read()
-        utilsphwrt.log.info(out.decode("utf-8"))
         proc.wait()
     except ValueError, e:
-        local_transcode()
         print e.output
         utilsphwrt.log.info(e.output)
         proc.kill()
