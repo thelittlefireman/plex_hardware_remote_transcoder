@@ -188,8 +188,9 @@ def transcode(configPath=None):
         proc = subprocess.Popen(new_args, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE, shell=False)
         proc.wait()
+        returnCode = proc.returncode
         result = proc.stdout.readlines()
-        if result == []:
+        if returnCode!=0 or result == []:
             error = proc.stderr.readlines()
             raise Exception("remote transcode failed ! ERROR: %s" % error)
         else:
