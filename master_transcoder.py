@@ -123,13 +123,10 @@ def override():
 def local_transcode():
     args = [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
      # Spawn the process
-    try:
-        proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
-        proc.wait()
-    except ValueError, e:
-        print e.output
-        utilsphwrt.log.info(e.output)
-        proc.kill()
+
+    proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
+    proc.wait()
+#   proc.kill()
 
 def transcode(configPath=None):
     utilsphwrt.setup_logging()
@@ -140,7 +137,7 @@ def transcode(configPath=None):
         config = utilsphwrt.get_config(configPath)
     # Set up the arguments
     #original transcode path args = [getNewTranscoderPath()] + sys.argv[1:]
-    args = sys.argv[1:]
+    old_args = sys.argv[1:]
     # get serveurs list
     servers = config["servers"]
 
@@ -155,7 +152,7 @@ def transcode(configPath=None):
         utilsphwrt.log.error("can't select server")
         local_transcode()
         return False
-    args = utilsphwrt.convertAndFixParameter(config, args)
+    new_args = utilsphwrt.convertAndFixParameter(config, old_args)
     
     working_dir=""
     if "transcode_path" in config and ( config["transcode_path"]!="" or config["transcode_path"]!=None ):
@@ -165,7 +162,7 @@ def transcode(configPath=None):
     command = REMOTE_ARGS % {
         #"working_dir":  pipes.quote(os.getcwd()),
         "command":      "ffmpeg",
-        "args":         ' '.join([pipes.quote(a) for a in args])
+        "args":         ' '.join([pipes.quote(a) for a in new_args])
     }
     utilsphwrt.log.info("Launching transcode_remote with command %s\n" % command)
 
@@ -174,21 +171,21 @@ def transcode(configPath=None):
             utilsphwrt.log.info("To use ssh with password auth you should install sshpass first")
             local_transcode()
             return False
-        args = ["sshpass", "-p", "%s" % selected_host["password"],"ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
+        new_args = ["sshpass", "-p", "%s" % selected_host["password"],"ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
     else:
         if not find_executable("ssh"):
             utilsphwrt.log.info("To use ssh you should install ssh first")
             local_transcode()
             return False
-        args = ["ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
+        new_args = ["ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
 
-    args = args + [command]
+    new_args = new_args + [command]
 
-    utilsphwrt.log.info("Launching transcode_remote with args %s\n" % args)
+    utilsphwrt.log.info("Launching transcode_remote with args %s\n" % new_args)
 
     # Spawn the process
     try:
-        proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
+        proc = subprocess.Popen(new_args, stderr=sys.stdout, shell=True)
         #out = proc.stdout.read()
         #utilsphwrt.log.info(out.decode("utf-8"))
         returnCode = proc.wait()
