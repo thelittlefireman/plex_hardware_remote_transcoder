@@ -194,11 +194,11 @@ def transcode(configPath=None):
         returnCode = proc.wait()
         if returnCode !=0:
             utilsphwrt.log.info("return code !=0")
-            local_transcode()
-    except ValueError, e:
+            raise Exception("remote transcode failed ! ")
+    except:
+        utilsphwrt.log.info("switch to local transcoder")
         local_transcode()
-        print e.output
-        utilsphwrt.log.info(e.output)
+        utilsphwrt.log.info(sys.exc_info()[0])
         proc.kill()
 
     utilsphwrt.log.info("Transcode stopped on host '%s'" % hostname)
