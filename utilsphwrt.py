@@ -100,7 +100,7 @@ def get_config(path=None):
     try:
         return json.load(open(file_path))
     except Exception, e:
-        if DEBUG :
+        if DEBUG:
             print ("Error load config: %s %s" % (str(e),str(path)))
         else:
             log.error("Error load config: %s %s" % (str(e),str(path)))
@@ -204,12 +204,12 @@ def getPHWRTTranscoderPath():
 def setup_logging():
     config = get_config()
     logging.config.dictConfig(config["logging"])
-    if DEBUG:
-        rootLog = logging.getLogger()
-        ch = logging.StreamHandler(sys.stdout)
-        ch.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        ch.setFormatter(formatter)
-        rootLog.addHandler(ch)
+#   if DEBUG:
+    rootLog = logging.getLogger()
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    rootLog.addHandler(ch)
 
 

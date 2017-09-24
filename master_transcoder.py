@@ -11,8 +11,7 @@ import shutil
 import utilsphwrt
 
 """ Global Variable installation """
-REMOTE_ARGS = (#"%(env)s;"
-    "cd %(working_dir)s;"
+REMOTE_ARGS = ("cd %(working_dir)s;"
     "%(command)s %(args)s")
 
 
@@ -167,7 +166,6 @@ def transcode(configPath=None):
     else:
         working_dir=os.getcwd()
     command = REMOTE_ARGS % {
-        #"env":          build_env(),
         "working_dir":  pipes.quote(),
         "command":      "ffmpeg",
         "args":         ' '.join([pipes.quote(a) for a in args])
