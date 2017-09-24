@@ -204,4 +204,12 @@ def getPHWRTTranscoderPath():
 def setup_logging():
     config = get_config()
     logging.config.dictConfig(config["logging"])
+    if DEBUG:
+        rootLog = logging.getLogger()
+        ch = logging.StreamHandler(sys.stdout)
+        ch.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        ch.setFormatter(formatter)
+        rootLog.addHandler(ch)
+
 

@@ -176,23 +176,20 @@ def transcode(configPath=None):
 
     if "password" in selected_host and (selected_host["password"]!="" or selected_host["password"]!= None):
         if not find_executable("sshpass"):
-            print "To use ssh with password auth you should install sshpass first"
+            utilsphwrt.log.info("To use ssh with password auth you should install sshpass first")
             local_transcode()
             return False
         args = ["sshpass", "-p", "%s" % selected_host["password"],"ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
     else:
         if not find_executable("ssh"):
-            print "To use ssh you should install ssh first"
+            utilsphwrt.log.info("To use ssh you should install ssh first")
             local_transcode()
             return False
         args = ["ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
 
     args = args + [command]
 
-    if utilsphwrt.DEBUG:
-        print ("Launching transcode_remote with args %s\n" % args)
-    else:
-        utilsphwrt.log.info("Launching transcode_remote with args %s\n" % args)
+    utilsphwrt.log.info("Launching transcode_remote with args %s\n" % args)
 
     # Spawn the process
     try:
