@@ -123,7 +123,7 @@ def override():
 def local_transcode():
     args = [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
      # Spawn the process
-
+    utilsphwrt.log.info("local transcoder")
     proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
     proc.wait()
 #   proc.kill()
@@ -196,7 +196,6 @@ def transcode(configPath=None):
         utilsphwrt.log.info("switch to local transcoder")
         local_transcode()
         utilsphwrt.log.info(sys.exc_info()[0])
-        proc.kill()
 
     utilsphwrt.log.info("Transcode stopped on host '%s'" % hostname)
 
