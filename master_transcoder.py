@@ -121,7 +121,7 @@ def override():
     install_phwrt()
     
 def local_transcode():
-    args = [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
+    args = ["LD_LIBRARY_PATH=/usr/lib/plexmediaserver"] [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
      # Spawn the process
     utilsphwrt.log.info("local transcoder with args %s\n" % args)
     proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
