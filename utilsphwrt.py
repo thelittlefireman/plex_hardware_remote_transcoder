@@ -129,7 +129,7 @@ def convertAndFixParameter(config, args):
                 if new_path:
                     log.debug("Replacing path with: %s" % new_path)
                     new_args.append(new_path)
-                 else:
+                else:
                      new_args.append(path)
             except Exception, e:
                 log.error("Error calling path_script: %s" % str(e))
