@@ -185,13 +185,15 @@ def transcode(configPath=None):
 
     # Spawn the process
     try:
-        proc = subprocess.Popen(new_args, stderr=sys.stdout, shell=True)
-        #out = proc.stdout.read()
-        #utilsphwrt.log.info(out.decode("utf-8"))
-        returnCode = proc.wait()
-        if returnCode !=0:
-            utilsphwrt.log.info("return code !=0")
-            raise Exception("remote transcode failed ! ")
+        proc = subprocess.Popen(new_args, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, shell=False)
+        proc.wait()
+        result = proc.stdout.readlines()
+        if result == []:
+            error = proc.stderr.readlines()
+            raise Exception("remote transcode failed ! ERROR: %s" % error)
+        else:
+            utilsphwrt.log.info(result)
     except:
         utilsphwrt.log.info("switch to local transcoder")
         local_transcode()
