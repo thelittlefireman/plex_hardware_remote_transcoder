@@ -117,7 +117,7 @@ def override():
     if os.path.exists(utilsphwrt.getNewTranscoderPath()):
         shutil.copy(utilsphwrt.getNewTranscoderPath(),utilsphwrt.getOriginalTranscoderPath())
         os.chmod(utilsphwrt.getOriginalTranscoderPath(), 0755)
-    os.remove(utilsphwrt.getPHWRTTranscoderPath())
+    os.remove(utilsphwrt.getNewTranscoderPath())
 
     install_phwrt()
     
