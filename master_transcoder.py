@@ -121,7 +121,7 @@ def override():
     install_phwrt()
     
 def local_transcode():
-    args = ["LD_LIBRARY_PATH=".join(utilsphwrt.getTranscoderPath())] + [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
+    args = ["LD_LIBRARY_PATH="+utilsphwrt.getTranscoderPath()] + [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
      # Spawn the process
     utilsphwrt.log.info("local transcoder with args %s\n" % args)
     proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
@@ -192,6 +192,7 @@ def transcode(configPath=None):
         result = proc.stdout.readlines()
         if returnCode!=0 or result == []:
             error = proc.stderr.readlines()
+            utilsphwrt.log.error("remote transcode failed ! ERROR: %s" % error)
             raise Exception("remote transcode failed ! ERROR: %s" % error)
         else:
             utilsphwrt.log.info(result)
