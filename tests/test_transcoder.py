@@ -14,6 +14,8 @@ class TestTranscoder(TestCase):
         self.assertFalse(master_transcoder.transcode())
 
     def test_remote_transcoder_password_noSSHPASS(self):
+        #proc = subprocess.Popen("apt-get -y remove sshpass", stderr=sys.stdout, shell=True)
+        #proc.wait()
         self.assertTrue(master_transcoder.transcode(os.path.join("./tests/configTestNoPassword.json")))
 
     def test_remote_transcoder_password_sshpass(self):

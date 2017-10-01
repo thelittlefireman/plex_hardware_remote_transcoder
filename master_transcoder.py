@@ -171,13 +171,13 @@ def transcode(configPath=None):
             utilsphwrt.log.info("To use ssh with password auth you should install sshpass first")
             local_transcode()
             return False
-        new_args = ["sshpass", "-p", "%s" % selected_host["password"],"ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
+        new_args = ["sshpass", "-p", "%s" % selected_host["password"],"ssh","-o","UserKnownHostsFile=/dev/null", "-o","StrictHostKeyChecking=no", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
     else:
         if not find_executable("ssh"):
             utilsphwrt.log.info("To use ssh you should install ssh first")
             local_transcode()
             return False
-        new_args = ["ssh", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
+        new_args = ["ssh","-o","UserKnownHostsFile=/dev/null", "-o","StrictHostKeyChecking=no", "-tt", "-R", "32400:127.0.0.1:32400", "%s@%s" % (selected_host["user"], selected_hostname), "-p", selected_host["port"]]
 
     new_args = new_args + [command]
 

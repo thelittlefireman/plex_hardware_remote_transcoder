@@ -67,7 +67,7 @@ DEFAULT_CONFIG = {
         "handlers": {
             "file_handler": {
                 "class": "logging.handlers.RotatingFileHandler",
-                "level": "INFO",
+                "level": "DEBUG",
                 "formatter": "simple",
                 "filename": "/tmp/prt.log",
                 "maxBytes": 10485760,
