@@ -121,12 +121,29 @@ def override():
     install_phwrt()
     
 def local_transcode():
-    args = ["LD_LIBRARY_PATH="+utilsphwrt.getTranscoderPath()] + [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
+    os.environ["LD_LIBRARY_PATH"] = "%s:$LD_LIBRARY_PATH" % utilsphwrt.getTranscoderPath()
+    args = [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
+
      # Spawn the process
     utilsphwrt.log.info("local transcoder with args %s\n" % args)
-    proc = subprocess.Popen(args, stderr=sys.stdout, shell=True)
-    proc.wait()
-#   proc.kill()
+#todo:
+    #if is_debug:
+    utilsphwrt.log.info('Debug mode - enabling verbose ffmpeg output')
+
+    # Change logging mode for FFMpeg to be verbose
+    for i, arg in enumerate(sys.argv):
+        if arg == '-loglevel':
+            sys.argv[i+1] = 'verbose'
+        elif arg == '-loglevel_plex':
+            sys.argv[i+1] = 'verbose'
+
+    proc = subprocess.Popen(args, stderr=subprocess.PIPE)
+    while True:
+        output = proc.stderr.readline()
+        if output == '' and proc.poll() is not None:
+            break
+        if output:
+            utilsphwrt.log.debug(output.strip('\n'))
 
 def transcode(configPath=None):
     utilsphwrt.setup_logging()
