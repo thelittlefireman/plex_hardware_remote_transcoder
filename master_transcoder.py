@@ -143,7 +143,7 @@ def local_transcode():
         if output == '' and proc.poll() is not None:
             break
         if output:
-            utilsphwrt.log.debug(output.strip('\n'))
+            utilsphwrt.log.info(output.strip('\n'))
 
 def transcode(configPath=None):
     utilsphwrt.setup_logging()
