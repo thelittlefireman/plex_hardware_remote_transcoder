@@ -170,7 +170,18 @@ def transcode(configPath=None):
         local_transcode()
         return False
     new_args = utilsphwrt.convertAndFixParameter(config, old_args)
-    
+
+    #todo:
+    #if is_debug:
+    utilsphwrt.log.info('Debug mode - enabling verbose ffmpeg output')
+
+    # Change logging mode for FFMpeg to be verbose
+    for i, arg in enumerate(new_args):
+        if arg == '-loglevel':
+            new_args[i+1] = 'verbose'
+        elif arg == '-loglevel_plex':
+            new_args[i+1] = 'verbose'
+
     working_dir=""
     if "transcode_path" in config and ( config["transcode_path"]!="" or config["transcode_path"]!=None ):
         working_dir=config["transcode_path"]
