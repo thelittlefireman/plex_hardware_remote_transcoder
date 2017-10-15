@@ -121,6 +121,7 @@ def override():
     install_phwrt()
 
 def subtring_optimisation(configPath=None):
+    utilsphwrt.setup_logging()
     os.environ["LD_LIBRARY_PATH"] = "%s:$LD_LIBRARY_PATH" % utilsphwrt.getTranscoderPath()
     if configPath == None:
         config = utilsphwrt.get_config()
