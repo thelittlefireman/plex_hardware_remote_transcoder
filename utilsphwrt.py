@@ -44,8 +44,8 @@ paramsToChangeDefault=["-time_delta","-channel_layoutstereo","-skip_to_segment",
 newParamsDefault=["-segment_time_delta","","-segment_start_number","-progress","copy","cedrus264 '-pix_fmt nv12'","cedrus264 '-pix_fmt nv12'","-crf","-maxrate","-bufsize","-r","-preset","-x264opts","-force_key_frames","-metadata:s:a","-metadata:s:v","copy","-ar","-channel_layout","-b:a","-mpegts_copyts","expr:gte(t,n_forced*1)","copy"]
 
 paramsToDeleteSubstring=["-filter_complex","-crf:0","-x264opts:0"]
-paramsToChangeSubstring=["[1]","libx264","aac"]
-newParamsSubstring=["0:0","copy","copy"]
+paramsToChangeSubstring=["[1]","libx264"]
+newParamsSubstring=["0:0","copy"]
 #TODO subtitle : -vf subtitles=sub.srt:force_style='FontName=DejaVu Serif,FontSize=24' or ass codec
 
 
