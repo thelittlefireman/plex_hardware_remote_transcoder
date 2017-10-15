@@ -128,20 +128,22 @@ def subtring_optimisation(configPath=None):
     else:
         config = utilsphwrt.get_config(configPath)
     newargs = utilsphwrt.convertAndFixParameter(config,sys.argv[1:],'SUBSTRING')
-    args = [utilsphwrt.getNewTranscoderPath()] + newargs
-
-    # Spawn the process
-    utilsphwrt.log.info("local transcoder with args %s\n" % args)
     #todo:
     #if is_debug:
     utilsphwrt.log.info('Debug mode - enabling verbose ffmpeg output')
 
     # Change logging mode for FFMpeg to be verbose
-    for i, arg in enumerate(sys.argv):
+    for i, arg in enumerate(newargs):
         if arg == '-loglevel':
-            sys.argv[i+1] = 'verbose'
+            newargs[i+1] = 'verbose'
         elif arg == '-loglevel_plex':
-            sys.argv[i+1] = 'verbose'
+            newargs[i+1] = 'verbose'
+
+    args = [utilsphwrt.getNewTranscoderPath()] + newargs
+
+    # Spawn the process
+    utilsphwrt.log.info("local transcoder with args %s\n" % args)
+
 
     proc = subprocess.Popen(args, stderr=subprocess.PIPE)
     while True:
