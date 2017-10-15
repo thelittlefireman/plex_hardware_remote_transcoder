@@ -32,7 +32,7 @@ setup(
     entry_points={
         'console_scripts': [
             'phwrt-master=master_transcoder:main',
-            'phwrt-m-tr=master_transcoder:subtring_optimisation',
+            'phwrt-m-tr=master_transcoder:transcode',
             'phwrt-slave=slave_transcoder:main'
         ],
     },
