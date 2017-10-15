@@ -122,12 +122,12 @@ def override():
 
 def subtring_optimisation(configPath=None):
     os.environ["LD_LIBRARY_PATH"] = "%s:$LD_LIBRARY_PATH" % utilsphwrt.getTranscoderPath()
-    args = [utilsphwrt.getNewTranscoderPath()] + sys.argv[1:]
+    newargs = utilsphwrt.convertAndFixParameter(config,sys.argv[1:],'SUBSTRING')
+    args = [utilsphwrt.getNewTranscoderPath()] + newargs
     if configPath == None:
         config = utilsphwrt.get_config()
     else:
         config = utilsphwrt.get_config(configPath)
-    args = utilsphwrt.convertAndFixParameter(config,args,'SUBSTRING')
     # Spawn the process
     utilsphwrt.log.info("local transcoder with args %s\n" % args)
     #todo:
