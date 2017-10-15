@@ -128,6 +128,8 @@ def subtring_optimisation(configPath=None):
     else:
         config = utilsphwrt.get_config(configPath)
     newargs = utilsphwrt.convertAndFixParameter(config,sys.argv[1:],'SUBSTRING')
+    #test supression des encoders
+    newargs = newargs[3:]
     #todo:
     #if is_debug:
     utilsphwrt.log.info('Debug mode - enabling verbose ffmpeg output')
