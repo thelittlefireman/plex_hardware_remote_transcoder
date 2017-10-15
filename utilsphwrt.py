@@ -5,6 +5,7 @@ import subprocess
 import logging.config
 from distutils.spawn import find_executable
 
+
 import sys
 
 DEBUG=None
@@ -177,7 +178,7 @@ def getTranscoderPath():
         # OS X
         TRANSCODER_PATH = "/Applications/Plex Media Server.app/Contents/"
 
-    elif sys.platform.find('synology') != -1:
+    elif subprocess.call(["uname","-a"]).find('synology') != -1:
         # todo set by variable : volumeNum = raw_input("Volume Number: ")
         #synology
         TRANSCODER_PATH = "/volume1/@appstore/Plex Media Server/"
@@ -196,7 +197,7 @@ def getSettingsPath():
         # OS X
         SETTINGS_PATH  = "~/Library/Preferences/com.plexapp.plexmediaserver"
 
-    elif sys.platform.find('synology') != -1:
+    elif subprocess.call(["uname","-a"]).find('synology') != -1:
         # todo set by variable : volumeNum = raw_input("Volume Number: ")
         #synology
         SETTINGS_PATH  = "/volume1/Plex/Library/Application Support/Plex Media Server/Preferences.xml"
