@@ -8,7 +8,7 @@ from distutils.spawn import find_executable
 
 import sys
 
-DEBUG=True
+DEBUG=None
 
 # TODO change to be configurable by a file
 # todo fix font parameters : /usr/lib/plexmediaserver/Resources/Fonts/
@@ -118,8 +118,8 @@ def substring_convertAndFixParameter(config, args):
 
 def convertAndFixParameter(config, args, convertion_type='DEFAULT'):
     # Check to see if we need to call a user-script to replace/modify the file path*
-    if DEBUG:
-        print 'before [%s]' % ', '.join(map(str, args))
+
+    log.info('before [%s]' % ', '.join(map(str, args)))
 
     if convertion_type =='SUBSTRING':
         paramsToChange =paramsToChangeSubstring
@@ -166,8 +166,7 @@ def convertAndFixParameter(config, args, convertion_type='DEFAULT'):
             m_index=m_index+1
             #TODO add some specifique arguments
             #ffmpegAddArgs
-    if DEBUG:
-        print 'after [%s]' % ', '.join(map(str, new_args))
+    log.info('after [%s]' % ', '.join(map(str, new_args)))
 
     return new_args
 
