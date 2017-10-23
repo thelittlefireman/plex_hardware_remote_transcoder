@@ -8,7 +8,7 @@ from distutils.spawn import find_executable
 
 import sys
 
-DEBUG=None
+DEBUG=True
 
 # TODO change to be configurable by a file
 # todo fix font parameters : /usr/lib/plexmediaserver/Resources/Fonts/
