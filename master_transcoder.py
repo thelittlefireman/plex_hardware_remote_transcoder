@@ -134,12 +134,12 @@ def subtring_optimisation(configPath=None):
     if utilsphwrt.DEBUG:
         utilsphwrt.log.info('Debug mode - enabling verbose ffmpeg output')
 
-        # Change logging mode for FFMpeg to be verbose
-        for i, arg in enumerate(newargs):
-            if arg == '-loglevel':
-                newargs[i+1] = 'verbose'
-            elif arg == '-loglevel_plex':
-                newargs[i+1] = 'verbose'
+    # Change logging mode for FFMpeg to be verbose
+    for i, arg in enumerate(newargs):
+        if arg == '-loglevel':
+            newargs[i+1] = 'verbose'
+        elif arg == '-loglevel_plex':
+            newargs[i+1] = 'verbose'
 
     args = [utilsphwrt.getNewTranscoderPath()] + newargs
 
